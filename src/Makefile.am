@@ -1,15 +1,3 @@
-if OS_WIN32
-
-install-libtool-import-lib:
-	$(INSTALL) .libs/libuspell.dll.a $(DESTDIR)$(libdir)
-
-uninstall-libtool-import-lib:
-	-rm $(DESTDIR)$(libdir)/libuspell.dll.a
-else
-install-libtool-import-lib:
-uninstall-libtool-import-lib:
-endif
-
 INCLUDES=
 
 bin_PROGRAMS=udriver
@@ -45,7 +33,3 @@ libuspell_include_HEADERS = \
 	uniprops.h	\
 	uspell.h	\
 	utf8convert.h
-
-install-data-local: install-libtool-import-lib
-
-uninstall-local: uninstall-libtool-import-lib
