@@ -26,7 +26,7 @@
 
 #define MAXALTERNATIVE 4
 
-class uSpell *mySpeller;
+uSpell *mySpeller;
 
 void treat(utf8_t *word) {
 	// see if the word is spelled right, and if not, print alternatives.
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
 		treat(buf);
 	} // one sample word
 	fprintf(stdout, "deallocating mySpeller\n");
-	mySpeller->~uSpell();
+	delete mySpeller;
 	// sleep(10);
 	return(0);
 } // main

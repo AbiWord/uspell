@@ -11,7 +11,7 @@ USPELL_MINOR_VERSION=1
 dnl     3) Increment when interfaces not changed at all,
 dnl               only bug fixes or internal changes made.
 dnl     4b) Set to zero when adding, removing or changing interfaces.
-USPELL_MICRO_VERSION=0
+USPELL_MICRO_VERSION=1
 dnl
 dnl     Set this too
 MAJOR_VERSION_PLUS_MINOR_VERSION=`expr $USPELL_MAJOR_VERSION + $USPELL_MINOR_VERSION`

@@ -389,7 +389,7 @@ int uSpell::isSpelledRightMultiple(wide_t *string, const int length) {
 	int finalIndex = -1; // most recent position of final character
 	wide_t theOriginal = 0; // avoid warning 
 	wide_t lastChar;
-	for (divide = 1; divide < length-1; divide += 1) {
+	for (divide = 2; divide < length-2; divide += 1) { // at least 2 chars
 		// consider string[0..divide-1] + string[divide..length-1]
 		lastChar = *(string+divide-1);
 		if (toFinal(lastChar) != lastChar) { // it has a final form
