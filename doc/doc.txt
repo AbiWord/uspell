@@ -1,0 +1,144 @@
+The uspell package: a spelling checker/corrector for Unicode-encoded
+dictionaries.
+
+Author:  Raphael Finkel <raphael@cs.uky.edu> 3/2003
+
+License:  Gnu Public License.
+
+Version: 1.0.0, 5/2003
+
+The ideas in this code are based on my understanding of aspell.  All the code
+is my own, except for a public-domain hash function (most likely overkill) from
+Bob Jenkins and some routines from Bram Moolenaar's Vim, some of which I helped
+write.
+
+Information for writing clients:
+
+	Look at driver.cpp, which is a typical client.  You make a new instance of
+	the uSpell class for each language; you can have several at once.  As you
+	build an instance you give uSpell the name of a file that contains a word
+	list, in UTF8.  Unlike aspell, I don't allow any shortcuts to indicate
+	multiple prefixes or suffices on the same root.  Every possible word should
+	be listed.  For Yiddish, I have about 70K words, taking up 1.5MB of file.
+
+	If your language has combined characters, such as ñ, you have several
+	alternatives.  (1) You can consider only the precomposed form (ñ) correctly
+	spelled.  Make sure your dictionary only has that form, and don't give the
+	expandPrecomposed flag to the initializer.  (2) You can consider only the
+	non-precomposed form (ñ) correctly spelled.  Make sure your dictionary has
+	no precomposed forms, or pass the expandPrecomposed flag to the
+	initializer, and it will expand any precomposed characters in the
+	dictionaries.  When a word is reported as misspelled, try expanding all
+	precomposed forms (there is an example in driver.cpp) and try again.
+
+	You may also give the initializer the name of a transcription description
+	file, which has a line for each "sounds-like" respelling, in order to guide
+	the suggestions for respelling words.  For instance, in English, you might
+	want "ough" to be considered similar to "ow".
+
+	It takes a few seconds (depending on the length of the dictionary file and
+	the speed of your computer; Yiddish takes 3 seconds on a 200MH Pentium) to
+	assimilate the file and build the class instance.
+
+	After the class instance has been built, you can add supplemental files to
+	it, for instance, for personal dictionaries.
+
+	Then you can present words (let's call them probes).  You can discover if
+	a probe is spelled right, you can indicate that a probe should be
+	considered right, and you can add a probe to the list of correct words
+	that may be used as suggestions for respelling badly spelled words.  For a
+	badly spelled word, you can request a list of correctly spelled
+	alternatives.  You can convert a word to all-upper case and try again.
+	You can ask that the word be considered a compound of two correctly-spelled
+	words and try again.  In this last case, in languages where some letters
+	have final-form codes, the first of the two words will have its last letter
+	temporarily converted to final form before the test.
+
+Notes on internals:
+	
+	All words are internally stored in UCS (typically UCS4; one can set UCS2,
+	but the calls to hash2() need to be adjusted in that case).
+
+	This package uses two hash tables of length proportional to the length of
+	the major dictionary; let's call them G (for good words) and S (for
+	suggestions).
+
+	G is a bit table.  For every word w in the dictionary, G[hash(w)] is turned
+	on.  Actually, we use 5 different hash functions, and turn on all 5 bits
+	G[hash_i(w)].  To see if a probe p is correctly spelled, we check that all
+	5 bits G[hash_i(p)] are turned on.  If so, we call it correct.  There will
+	be false positives, but not very frequently.
+
+	S is a table of pointers to the dictionary.  Actually, each 32-bit entry
+	has a 3-bit field for the file number and 29 bits for offset into that
+	file.  File 0 isn't used.  File 1 is the main dictionary, which we keep
+	open for reading until the class instance is deallocated.  File 2 is the
+	first additional dictionary, and so on up through file 6.  File 7 is a
+	temporary file used for newly accepted words that are not part of any
+	dictionary.  It is created and immediately unlinked, so when the program
+	terminates, it is gone.
+
+	S is much longer than G; for my Yiddish file, it has 2097152 32-bit
+	entries.  Its length is always a power of 2.  As a rough estimate,
+	therefore, each dictionary takes about 10M of program memory.
+
+	For each good word w in file f at offset o, variants of w are inserted in G
+	with data (f,o).  These variants include (1) reduce(w), which is w with all
+	combining characters removed, precomposed letters reduced to base forms,
+	and language-specific transcriptions performed, (2) reduce(w) with one
+	character missing (one entry for each character in reduce(w)).
+
+	Collisions in G are handled by quadratic rehash.  Chains can coalesce.
+	Therefore, when you look up reduce(p) in G, you get a list of entries that
+	includes, you hope, some pretty good suggestions for p, but also some
+	completely unrelated words that happen to collide.
+
+	If p turns out to be misspelled, we form a list of suggestions by
+	collecting all the hash chains in G based on (1) reduce(p) (2) reduce(p)
+	with a character missing, and (3) reduce(p) with adjacent characters
+	transposed.  All the suggestions are ranked by distance from reduce(p);
+	those that are close are retained.  The distance measure between w1 and w2
+	is the number of letters in w1 not found within a few positions in w2 plus
+	the number of letters in w2 not found within a few positions in w1.
+
+	Transcription is performed by a separate transcriber class, which is
+	initialized according to a file of transcriptions.  An instance builds a
+	finite-state machine; transcribing a string costs time proportional to the
+	length of the string, not the number of transcription rules.  But the size
+	of the finite-state machine is proportional to the number and length of the
+	rules; each character on a left-hand size contributes about 2K to the data
+	structure (at most; there will usually be lots of sharing).
+
+	The code includes Unicode utility routines in uniprops.cpp.  These use
+	tables based on Unicode-4.0.0.
+
+Suggestions for improvements.
+
+	If we allow affix abbreviations, as in ispell and aspell, we can make
+	dictionary files much shorter.  But we still need to expand all the
+	dictionary forms to build the G and S tables, so I am not sure anything is
+	to be gained.  Still, it might be worth considering.
+
+	We could write out the G and S tables into files for later use, saving the
+	time needed to assimilate the dictionary.  But these tables are large, about
+	10 times as long as the dictionary file.  The S table refers to positions
+	within the dictionary file(s), which must therefore be available later in
+	any case.
+
+Manifest:
+	Makefile: by default, builds the various routines and the driver program
+	README: Quick summary
+	doc.txt: this file
+	driver.cpp: C++ source for a driver program that uses this package
+	lookup2.cpp: C++ source for hashing routines written by Bob Jenkins
+	lookup2.h: Header for lookup2.cpp
+	myparameters.h: global parameters for the uspell package
+	mytypes.h: defines the few types we need: utf8_t and wide_t.
+	transcribe.cpp: C++ source for the transcriber program
+	transcribe.h: Header for transcribe.cpp
+	uniprops.cpp: C++ source for Unicode property routines
+	uniprops.h: Header for uniprops.cpp
+	uspell.cpp: C++ source for the uSpell class
+	uspell.h: Header for uspell.cpp
+	utf8convert.cpp: C++ source for conversion routines between utf8_t and wide
+	utf8convert.h: Header for utf8convert.cpp

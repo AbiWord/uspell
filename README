@@ -1,0 +1,11 @@
+This is uspell version 1.0.0, by Raphael Finkel <raphael@cs.uky.edu>.
+Copyright © Raphael Finkel
+License: Gnu Public License <http://www.gnu.org/copyleft/gpl.html>
+
+To install:
+	make depend
+	make
+	make test
+
+Documentation in doc.txt.
+
