@@ -1,0 +1,9 @@
+The file american.uspell.dat is a concatenation from scowl-5 english
+and american lists, with case-insensitive words capitalized.
+See http://wordlist.sourceforge.net/ .
+
+The file hebrew.uspell.dat comes from the hspell source.  Uspell doesn't work
+very well on Hebrew, because it doesn't have any way to represent standard
+prefixes, such as ו, ה, and ש, which are applicable to almost every word.
+
+The file yiddish.uspell.dat comes from Raphael Finkel's personal word list.
