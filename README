@@ -7,5 +7,5 @@ To install:
 	make
 	make test
 
-Documentation in doc.txt.
+Documentation in doc/doc.txt.
 

@@ -4,8 +4,8 @@ libdir=@libdir@
 includedir=@includedir@
 
 Name: libuspell
-Description: A yiddish checking library
+Description: A Unicode spell checker and corrector
 Version: @VERSION@
 Requires: 
 Libs: -L${libdir} -luspell
-Cflags: -I${includedir}/uspell
+Cflags: -I${includedir}

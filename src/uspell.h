@@ -20,11 +20,26 @@ class uSpell {
 			// if set, precomposed characters in the dictionary file will be
 			// expanded to ordinary unicode characters as the dictionary is
 			// loaded.
+		static const char upperLower = 1<<1;
+			// if set, the language distinguishes case.  This information is
+			// not used directly by uspell, but it can guide the application
+			// that uses uspell.
+		static const char hasCompounds = 1<<2;
+			// if set, the language allows compounds of two words.  This
+			// information is not used directly by uspell, but it can guide the
+			// application that uses uspell.
+		static const char hasComposition = 1<<3;
+			// if set, the language uses Unicode composing characters that
+			// might have precomposed versions.  This information is not used
+			// directly by uspell, but it can guide the application that uses
+			// uspell.
 #		define NUMDICTFILES 7
 			// number of open dictionary files per uspell object
 			// The last one is reserved, so one fewer is actually allowed
 			// Number 1 is the regular dictionary, 2 .. NUMDICTFILES-1 are
 			// supplemental.
+	// variables
+		char theFlags; // should be read-only to applications
 	// exceptions
 		static const int noSuchFile = 1; // can't open the dictFile
 		static const int noMem = 2; // out of memory
@@ -105,7 +120,6 @@ class uSpell {
 		suggestion_t suggestions[BUFLEN]; // kept sorted, best first
 		int suggestionCount;
 		class transcriber *myTranscribe;
-		char theFlags;
 		int fileNumber; // which file we are working on
 		FILE *wordFiles[NUMDICTFILES+1]; // wordFile[0] is not used.
 			// wordFile[1] is the main dictionary
