@@ -5,7 +5,7 @@ Author:  Raphael Finkel <raphael@cs.uky.edu> 3/2003
 
 License:  Gnu Public License.
 
-Version: 1.0.0, 5/2003
+Version: 1.0.1, 7/2003
 
 The ideas in this code are based on my understanding of aspell.  All the code
 is my own, except for a public-domain hash function (most likely overkill) from
@@ -142,3 +142,6 @@ Manifest:
 	uspell.h: Header for uspell.cpp
 	utf8convert.cpp: C++ source for conversion routines between utf8_t and wide
 	utf8convert.h: Header for utf8convert.cpp
+	dic: directory of dictionaries and transcription files.
+		yiddish: Created by Raphael Finkel from his own word list
+		hebrew: Created by Raphael Finkel from hspell's word list
