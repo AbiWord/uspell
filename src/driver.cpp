@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 	mySpeller = new uSpell(argv[1], argv[2], uSpell::expandPrecomposed);
-	if (*argv[4] && !mySpeller->assimilateFile(fopen(argv[4], "r"))) {
+	if (*argv[4] && !mySpeller->assimilateFile(argv[4])) {
 		fprintf(stdout, "Failed to assimilate secondary file\n");
 		exit(1);
 	}

@@ -57,7 +57,7 @@ class uSpell {
 			// leave this flag off, which has identical behavior if
 			// languageFile is fully expanded, with no precomposed characters.
 		~uSpell(); // finalizer
-		bool assimilateFile(FILE *wordFile);
+		bool assimilateFile(const char* wordFileName);
 			// The newFile should be a newline-delimited list of utf8-encoded
 			// words of the language.  Returns false if there is a problem,
 			// such as too many files (the limit is NUMDICTFILES-1) or a

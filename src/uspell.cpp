@@ -278,10 +278,12 @@ void uSpell::acceptWord(const utf8_t *string) {
 	acceptGoodWord(string, wordPosition, NUMDICTFILES);
 } // acceptWord
 
-bool uSpell::assimilateFile(FILE *wordFile) {
+bool uSpell::assimilateFile(const char *wordFileName) {
 	int wordCount;
 	int wordPosition;
+	FILE *wordFile = fopen(wordFileName, "r");
 	utf8_t buf[BUFLEN];
+	if (wordFile == NULL) return(0);
 	// fprintf(stdout, "assimilating file\n");
 	fileNumber += 1;
 	wordFiles[fileNumber] = wordFile;
@@ -317,6 +319,7 @@ uSpell::uSpell(const char *dictFile, const char *transcriptionFile,
 	myTranscribe = new transcriber(transcriptionFile);
 	fseek(wordFile, 0, SEEK_END);
 	tmpLength = ftell(wordFile);
+	fclose(wordFile);
 	reducedWordTableLength = 1;
 	while (tmpLength) {
 		reducedWordTableLength <<= 1;
@@ -340,7 +343,7 @@ uSpell::uSpell(const char *dictFile, const char *transcriptionFile,
 	// initialize all wordfiles
 	memset(wordFiles, 0, (NUMDICTFILES+1) * sizeof(wordFiles[0]));
 	fileNumber = 0; // assimilateFile will start with file #1.
-	assimilateFile(wordFile);
+	assimilateFile(dictFile);
 } // uSpell::uSpell
 
 uSpell::~uSpell() {
