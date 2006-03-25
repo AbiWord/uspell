@@ -143,7 +143,8 @@ void transcriber::transcribe(wide_t *dest, int *destLength,
 			aftSource = foreSource;
 			current = &transcribeStart;
 		} else { // no replacement; output one byte and rescan
-			*(reinterpret_cast<char *>(destPtr))++ = *aftSource++;
+			char * foo = reinterpret_cast<char *>(destPtr);
+			*(foo)++ = *aftSource++;
 			foreSource = aftSource;
 			current = &transcribeStart;
 		}
