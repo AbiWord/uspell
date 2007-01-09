@@ -136,7 +136,7 @@ class uSpell {
 			const wide_t *target, const int targetLength);
 		int wordDiff(const wide_t *string1, const int string1Length,
 			const wide_t *string2, const int string2Length);
-		void uSpell::acceptGoodWord(const utf8_t *buf, int wordPosition,
+		void acceptGoodWord(const utf8_t *buf, int wordPosition,
 			int fileNumber);
 }; // class uSpell
 
