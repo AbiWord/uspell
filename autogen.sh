@@ -10,7 +10,13 @@
 
 rm -f autogen.err
 
-automake --version | perl -ne 'if (/\(GNU automake\) ([0-9].[0-9])/) {print;  if ($1 < 1.4) {exit 1;}}'
+srcdir=`dirname $0`
+test -z "$srcdir" && srcdir=.
+
+olddir=`pwd`
+cd $srcdir
+
+automake --version | perl -ne 'if (/\(GNU automake\) (([0-9]+).([0-9]+))/) {print; if ($2 < 1 || ($2 == 1 && $3 < 4)) {exit 1;}}'
 
 if [ $? -ne 0 ]; then
     echo "Error: you need automake 1.4 or later.  Please upgrade."
@@ -60,7 +66,25 @@ autoconf 2>> autogen.err || {
     echo ""
 }
 
-echo ""
-echo "You can run ./configure now."
-echo ""
+cd $olddir
+
+run_configure=true
+for arg in $*; do
+    case $arg in
+        --no-configure)
+            run_configure=false
+            ;;
+        *)
+            ;;
+    esac
+done
+
+if $run_configure; then
+    $srcdir/configure --enable-maintainer-mode "$@"
+    echo
+    echo "Now type 'make' to compile enchant."
+else
+    echo
+    echo "Now run 'configure' and 'make' to compile enchant."
+fi
 
