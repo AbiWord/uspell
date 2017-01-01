@@ -3,9 +3,12 @@ Copyright © Raphael Finkel
 License: Gnu Public License <http://www.gnu.org/copyleft/gpl.html>
 
 To install:
-	make depend
+If you did a checkout from git, first do
+        ./autogen.sh
+And do
+        ./configure
 	make
-	make test
+	make check
+        make install
 
 Documentation in doc/doc.txt.
-

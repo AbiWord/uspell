@@ -82,9 +82,9 @@ done
 if $run_configure; then
     $srcdir/configure --enable-maintainer-mode "$@"
     echo
-    echo "Now type 'make' to compile enchant."
+    echo "Now type 'make' to compile uspell."
 else
     echo
-    echo "Now run 'configure' and 'make' to compile enchant."
+    echo "Now run 'configure' and 'make' to compile uspell."
 fi
 
