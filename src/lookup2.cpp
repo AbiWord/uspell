@@ -195,7 +195,7 @@ ub4 hash2(register const ub4 *k, register ub4 length, register ub4 initval)
  -- that all your machines be little-endian
 --------------------------------------------------------------------
 */
-
+#if 0 // doesn't compile on 64-bits. Not used anyway
 ub4 hash3(ub1 *k, ub4 length, ub4 initval)
 {
    register ub4 a,b,c,len;
@@ -251,7 +251,7 @@ ub4 hash3(ub1 *k, ub4 length, ub4 initval)
    /*-------------------------------------------- report the result */
    return c;
 }
-
+#endif
 
 
 #ifdef SELF_TEST
