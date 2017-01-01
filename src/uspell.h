@@ -99,7 +99,7 @@ class uSpell {
 			// char within this distance.
 		static const int infinity = 100000;
 		static const int offsetBits = 29;  // bits used to actually hold offset
-		static const fileOffset_t offsetMask = ~(-1 << offsetBits);
+		static const fileOffset_t offsetMask = ~(0xffffffff << offsetBits);
 
 	// types
 		typedef fileOffset_t *hashTable;
