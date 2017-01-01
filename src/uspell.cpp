@@ -258,7 +258,7 @@ void inline uSpell::acceptGoodWord(const utf8_t *buf, int wordPosition,
 void uSpell::acceptWord(const utf8_t *string) {
 	int wordPosition;
 	if (wordFiles[NUMDICTFILES] == NULL) { // first time; create the file
-		char *origTemplate = "/tmp/uspell.XXXXXX"; 
+		const char *origTemplate = "/tmp/uspell.XXXXXX";
 		char fileName[BUFLEN];
 		strncpy(fileName, origTemplate, strlen(origTemplate)+1);
 		int fd = mkstemp(fileName);
