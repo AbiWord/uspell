@@ -1,0 +1,4 @@
+This is the old Enchant provider for uspell.
+
+It comes with Makefile.am and configure.ac fragments from the Enchant source
+tree, to aid its resurrection should anyone desire that.

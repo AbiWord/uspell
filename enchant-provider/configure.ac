@@ -1,0 +1,1 @@
+ENCHANT_CHECK_PKG_CONFIG_PROVIDER([uspell], [USPELL], , [no])
