@@ -19,3 +19,4 @@ libtool
 libuspell.pc
 ltmain.sh
 missing
+src/udriver
